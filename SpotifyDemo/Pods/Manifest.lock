@@ -1,0 +1,55 @@
+PODS:
+  - Alamofire (4.6.0)
+  - AlamofireImage (3.3.0):
+    - Alamofire (~> 4.5)
+  - AlamofireObjectMapper (5.0.0):
+    - Alamofire (~> 4.1)
+    - ObjectMapper (~> 3.0)
+  - AlamoRecord (1.1.1):
+    - AlamofireObjectMapper (~> 5.0)
+  - LGSideMenuController (2.1.1)
+  - MagicalRecord (2.3.2):
+    - MagicalRecord/Core (= 2.3.2)
+  - MagicalRecord/Core (2.3.2)
+  - ObjectMapper (3.1.0)
+  - ORCommonCode-Swift (3.0.3)
+  - ORCommonUI-Swift (3.8.2):
+    - PureLayout (~> 3.0)
+  - ORCoreData (3.1.1):
+    - MagicalRecord (~> 2.3)
+  - PureLayout (3.0.2)
+  - Spartan (1.1.1):
+    - AlamoRecord (~> 1.1.1)
+  - SwiftyJSON (3.1.4)
+  - UIScrollView-InfiniteScroll (1.0.2)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.3)
+  - AlamofireImage (~> 3.2)
+  - LGSideMenuController (~> 2.1.1)
+  - ORCommonCode-Swift (~> 3.0.2)
+  - ORCommonUI-Swift (~> 3.8.2)
+  - ORCoreData (~> 3.1.0)
+  - Spartan
+  - SwiftyJSON (~> 3.1)
+  - UIScrollView-InfiniteScroll
+
+SPEC CHECKSUMS:
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
+  AlamofireObjectMapper: 5fafc816351cbbc0d486611aaeba7461c0cbad49
+  AlamoRecord: 78653b9a5da21ab5bb723167e0f552994df85d30
+  LGSideMenuController: ae40c80983ab8b8801c7cef0a6804d43aaa72d45
+  MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
+  ObjectMapper: 20505058f54e5c3ca69e1d6de9897d152a5369a6
+  ORCommonCode-Swift: 0435ad52c6c9b2ad292622f9f41bf930afc57960
+  ORCommonUI-Swift: 65ff5959baee5f5021afb6d226cd33a9e46f2db2
+  ORCoreData: 594896385c05bc09050f6994650b761e08f8a422
+  PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
+  Spartan: 0e2518f937e590b0dff19350db133110d676ddf0
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  UIScrollView-InfiniteScroll: c132d6d5851daff229ab4a1060ccf70a05a051c9
+
+PODFILE CHECKSUM: b5582d08721ff74d3616ab3cc3c374276dd2d327
+
+COCOAPODS: 1.4.0

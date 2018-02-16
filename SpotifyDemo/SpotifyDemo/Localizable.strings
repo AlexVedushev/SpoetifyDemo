@@ -1,0 +1,32 @@
+
+// MARK: - App Errors
+
+"app-error-description-1" = "";
+
+"app-error-description-100" = "Invalid Response";
+"app-error-description-101" = "Empty JSON";
+"app-error-description-102" = "Invalid JSON";
+
+"app-error-description-103" = "Need to create new cursor";
+"app-error-description-104" = "Duplicated items in feed list";
+"app-error-description-105" = "Feed list query in progress";
+
+"app-error-description-200" = "CoreData fetch";
+"app-error-description-201" = "";
+
+"app-error-description-404" = "Scene not found";
+
+"app-error-description-501" = "Scene not found";
+"app-error-description-501" = "An error occurred when opening the experience";
+"app-error-description-502" = "An error occurred while downloading the experience";
+
+"app-error-description-600" = "Please log in or sign up to save an experience.";
+"app-error-description-601" = "Please log in or sign up to make your vote official.";
+"app-error-description-602" = "We'd love to hear what you think. Please log in on sign up to voice your opinion.";
+
+"app-error-description-603" = "Please play the experience before voting.";
+"app-error-description-604" = "Please play the experience before feedback.";
+
+// MARK: - Server Errors
+
+"server-error-description-1000" = "server error without properly formatted description";
