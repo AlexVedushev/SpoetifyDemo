@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BEBB34912C09FC3B0E0ECD15 /* Pods_SpotifyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF198B394D1D8147C57E0D7D /* Pods_SpotifyDemo.framework */; };
+		CF0B044A2036F319002A8FB9 /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0B04492036F319002A8FB9 /* BaseVC.swift */; };
 		CF22A1462035910500D8D8C4 /* SideMenuRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A1452035910500D8D8C4 /* SideMenuRootViewController.swift */; };
 		CF22A148203599F600D8D8C4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A147203599F600D8D8C4 /* SearchViewController.swift */; };
 		CF22A14A2035A64A00D8D8C4 /* SearchTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A1492035A64A00D8D8C4 /* SearchTVCell.swift */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		AB2BF19DFF793E87EBBF2AFE /* Pods-SpotifyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpotifyDemo/Pods-SpotifyDemo.release.xcconfig"; sourceTree = "<group>"; };
 		C1317FBC48ED9CA1583036A3 /* Pods-SpotifyDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpotifyDemo/Pods-SpotifyDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		CF0B04492036F319002A8FB9 /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		CF22A1452035910500D8D8C4 /* SideMenuRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuRootViewController.swift; sourceTree = "<group>"; };
 		CF22A147203599F600D8D8C4 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		CF22A1492035A64A00D8D8C4 /* SearchTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTVCell.swift; sourceTree = "<group>"; };
@@ -122,6 +124,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		CF0B04482036F2F2002A8FB9 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				CF0B04492036F319002A8FB9 /* BaseVC.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		CF22A144203590E900D8D8C4 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +181,7 @@
 		CF5E307E20356CDE0007F506 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CF0B04482036F2F2002A8FB9 /* Base */,
 				CF22A144203590E900D8D8C4 /* Main */,
 				CF5E307F20356CDE0007F506 /* OldPlayListVC.swift */,
 				CF5E308020356CDE0007F506 /* PlayListListTableVC.swift */,
@@ -412,6 +423,7 @@
 				CF5E307320356CB10007F506 /* URLTequestBuilder.swift in Sources */,
 				CF5E308F20356CDE0007F506 /* AppError.swift in Sources */,
 				CF5E307520356CBF0007F506 /* AppConfig.swift in Sources */,
+				CF0B044A2036F319002A8FB9 /* BaseVC.swift in Sources */,
 				CF22A14A2035A64A00D8D8C4 /* SearchTVCell.swift in Sources */,
 				CF5E306F20356CB10007F506 /* APIAdapter.swift in Sources */,
 				CF5E307020356CB10007F506 /* APIBase.swift in Sources */,

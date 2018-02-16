@@ -27,17 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SPTAudioStreamingDelegate
         auth.sessionUserDefaultsKey = "current session"
         auth.requestedScopes = [SPTAuthStreamingScope]
         player.delegate = self
-        do {
-            try player.start(withClientId: auth.clientID)
-        } catch  {
-            print("There was a problem starting the Spotify SDK \(error.localizedDescription)")
-        }
-        
-        DispatchQueue.main.async {[weak self] in
-            self?.stareAuthenticationFlow()
-        }
-        stareAuthenticationFlow()
-        
         return true
     }
 
@@ -65,86 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SPTAudioStreamingDelegate
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        if auth.canHandle(url) {
-            authViewController.presentingViewController?.dismiss(animated: true, completion: nil)
-            authViewController = nil
-            auth.handleAuthCallback(withTriggeredAuthURL: url, callback: {[weak self] (error, session) in
-                if let auth = self?.auth,  session != nil {
-                    self?.player.login(withAccessToken: auth.session.accessToken)
-                }
-            })
-            return true
-        }
-        return false
+       return SpotifyManager.share.canHandleAuth(url: url)
     }
-    
-    // MARK: - SPTAudioStreamingDelegate
-    
-    func audioStreamingDidReconnect(_ audioStreaming: SPTAudioStreamingController!) {
-        
-        print("ACCESS TOKEN: \(auth.session.accessToken)")
-    }
-    
-    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        player.playSpotifyURI("spotify:track:4zvQE9LuGzE2r1zcDiDoZy", startingWith: 0, startingWithPosition: 0) { (error) in
-            if error != nil {
-                print("Falied to play")
-                return
-            }
-        }
-    }
-    
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
-        print(error)
-    }
-    
-    func audioStreamingDidEncounterTemporaryConnectionError(_ audioStreaming: SPTAudioStreamingController!) {
-        print("audioStreamingDidEncounterTemporaryConnectionError")
-    }
-    
-    func audioStreamingDidLogout(_ audioStreaming: SPTAudioStreamingController!) {
-        print("audioStreamingDidLogout")
-    }
-    
-    //MARK: - SFSafariViewControllerDelegate
-    
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        guard let accessToken = auth.session.accessToken else {return}
-        print("ACCESS TOKEN: \(accessToken)")
-        Spartan.authorizationToken = accessToken
-        APIBase.setAccessToken(accessToken)
-    }
-    
-    //MARK: - Helper methods
-    
-    func stareAuthenticationFlow() {
-        if let session = auth.session, session.isValid() {
-            print("ACCESS TOKEN: \(session.accessToken)")
-            APIBase.setAccessToken(auth.session.accessToken)
-            Spartan.authorizationToken = auth.session.accessToken
-            player.login(withAccessToken: auth.session.accessToken)
-        } else {
-            if let ssession = auth.session {
-                auth.renewSession(ssession, callback: {[weak self] (error, newSession) in
-                    guard error == nil else {
-                        print(error!)
-                        self?.showAuthentificationWebPage()
-                        return
-                    }
-                    self?.auth.session = newSession
-                })
-            } else {
-                showAuthentificationWebPage()
-            }
-        }
-    }
-    
-    private func showAuthentificationWebPage() {
-        guard let authURL = auth.spotifyWebAuthenticationURL() else {return}
-        authViewController = SFSafariViewController(url: authURL)
-        (authViewController as! SFSafariViewController).delegate = self
-        window?.rootViewController?.present(authViewController, animated: true, completion: nil)
-    }
-
 }
 
