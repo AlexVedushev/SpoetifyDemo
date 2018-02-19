@@ -12,16 +12,14 @@ import Spartan
 class PlayListListTableVC: UITableViewController {
     
     var paginationObject: PagingObject<SimplifiedPlaylist>?
+    var playlistList: [SPTPartialPlaylist] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        SpotifyManager.share.updateSessionIfNeed(self)
         setupRefreshController()
         addInfiniteScroll()
         getFirstPage()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     //MARK: - Setup
@@ -47,44 +45,26 @@ class PlayListListTableVC: UITableViewController {
     // MARK: - Action
     
     @objc func refreshList(_ sender: UIRefreshControl?) {
-        if paginationObject == nil {
-            Spartan.getMyPlaylists(success: {[weak self] (pagingObject) in
-                guard let sself = self else {return}
-                sself.paginationObject = pagingObject
-                sender?.endRefreshing()
-            }) { (error) in
-                sender?.endRefreshing()
-                Spartan.authorizationToken = SPTAuth.defaultInstance().session.accessToken
-                print(error)
-            }
-        } else {
-           getFirstPage()
-        }
+        getFirstPage()
     }
     
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return (paginationObject == nil) ? 0 : 1
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return paginationObject?.items.count ?? 0
+        return playlistList.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: PlayListTVCell.self), for: indexPath) as! PlayListTVCell
-        
-        if let items = paginationObject?.items {
-            cell.setupData(listName: items[indexPath.row].name, trackCount: items[indexPath.row].tracksObject.total, imageURi: items[indexPath.row].images.first?.url ?? "")
-        }
+        let playlist = playlistList[indexPath.row]
+        cell.setupData(listName: playlist.name, trackCount: Int(playlist.trackCount), imageURi: playlist.smallestImage.imageURL)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let itemList = paginationObject?.items else {return}
+        let playlist = playlistList[indexPath.row]
         let vc = VCEnum.tracklist.vc as! TrackListVC
-        vc.playlistId = (itemList[indexPath.row].id as! String)
+        
         show(vc, sender: self)
     }
 
@@ -92,15 +72,13 @@ class PlayListListTableVC: UITableViewController {
     // MARK: - Helpers metods
     
     private func getFirstPage() {
-        Spartan.getMyPlaylists(success: {[weak self] (pagingObject) in
-            guard let sself = self else {return}
-            sself.paginationObject = pagingObject
+        SpotifyManager.share.getCurrentUserPlaylists(self) {[weak self] (error, playlist) in
+            guard let sself = self, error == nil else {
+                print(error!)
+                return
+            }
+            sself.playlistList = playlist
             sself.reloadTableAndStopRefresh()
-        }) {[weak self] (error) in
-            guard let sself = self else {return}
-            Spartan.authorizationToken = SPTAuth.defaultInstance().session.accessToken
-            sself.reloadTableAndStopRefresh()
-            print(error)
         }
     }
     

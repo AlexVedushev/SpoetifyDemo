@@ -20,13 +20,10 @@ class PlayListTVCell: UITableViewCell {
         // Initialization code
     }
 
-    func setupData(listName: String, trackCount: Int, imageURi: String) {
+    func setupData(listName: String, trackCount: Int, imageURi: URL) {
         nameLabel.text = listName
         trackCountLabel.text = "\(trackCount)"
-        
-        if let imgURL = URL(string: imageURi) {
-            coverImageView.af_setImage(withURL: imgURL)
-        }
+        coverImageView.af_setImage(withURL: imageURi)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

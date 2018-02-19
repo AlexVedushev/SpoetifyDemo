@@ -12,6 +12,7 @@
 		CF22A1462035910500D8D8C4 /* SideMenuRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A1452035910500D8D8C4 /* SideMenuRootViewController.swift */; };
 		CF22A148203599F600D8D8C4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A147203599F600D8D8C4 /* SearchViewController.swift */; };
 		CF22A14A2035A64A00D8D8C4 /* SearchTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A1492035A64A00D8D8C4 /* SearchTVCell.swift */; };
+		CF343F24203AD0970063AC82 /* PlaylistListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF343F23203AD0970063AC82 /* PlaylistListManager.swift */; };
 		CF5E306F20356CB10007F506 /* APIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306A20356CB00007F506 /* APIAdapter.swift */; };
 		CF5E307020356CB10007F506 /* APIBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306B20356CB00007F506 /* APIBase.swift */; };
 		CF5E307120356CB10007F506 /* APIFeatureTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306C20356CB00007F506 /* APIFeatureTrack.swift */; };
@@ -50,6 +51,7 @@
 		CF22A1452035910500D8D8C4 /* SideMenuRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuRootViewController.swift; sourceTree = "<group>"; };
 		CF22A147203599F600D8D8C4 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		CF22A1492035A64A00D8D8C4 /* SearchTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTVCell.swift; sourceTree = "<group>"; };
+		CF343F23203AD0970063AC82 /* PlaylistListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistListManager.swift; sourceTree = "<group>"; };
 		CF5E306A20356CB00007F506 /* APIAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIAdapter.swift; sourceTree = "<group>"; };
 		CF5E306B20356CB00007F506 /* APIBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIBase.swift; sourceTree = "<group>"; };
 		CF5E306C20356CB00007F506 /* APIFeatureTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIFeatureTrack.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			children = (
 				CF5E307D20356CDD0007F506 /* UserInfoManager.swift */,
 				CFA0BAAB2036AD020051D4AC /* SpotifyManager.swift */,
+				CF343F23203AD0970063AC82 /* PlaylistListManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				CF5E308920356CDE0007F506 /* UserInfoManager.swift in Sources */,
 				CF5E309020356CDE0007F506 /* AppNotification.swift in Sources */,
 				CF5E308B20356CDE0007F506 /* PlayListListTableVC.swift in Sources */,
+				CF343F24203AD0970063AC82 /* PlaylistListManager.swift in Sources */,
 				CF5E309120356CDE0007F506 /* BaseError.swift in Sources */,
 				CF5E307320356CB10007F506 /* URLTequestBuilder.swift in Sources */,
 				CF5E308F20356CDE0007F506 /* AppError.swift in Sources */,
