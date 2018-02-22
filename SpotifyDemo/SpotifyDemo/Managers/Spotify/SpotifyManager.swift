@@ -9,10 +9,6 @@
 import Foundation
 import SafariServices
 
-enum SpotifyError: Error {
-    case InvalidSession
-}
-
 class SpotifyManager {
     
     static let share = SpotifyManager(clientID: "ca19f9334ea84e85a4194cc096dea9f1", redirectURL: URL(string: "spotify-ios-demo-login://")!, sessionUserDefaultsKey: "current session", requestedScopes: [SPTAuthStreamingScope])
@@ -22,21 +18,19 @@ class SpotifyManager {
         player = SPTAudioStreamingController.sharedInstance()
         auth.clientID = clientID
         auth.redirectURL = redirectURL
-        
         auth.sessionUserDefaultsKey = sessionUserDefaultsKey
         auth.requestedScopes =  requestedScopes
 //        player.delegate = self
     }
     
+    
     var auth: SPTAuth!
     var player: SPTAudioStreamingController!
     
     weak var authViewController: SFSafariViewController?
-    private weak var parentController: UIViewController?
-    private var user: SPTUser?
-    private var playlistListPage: SPTPlaylistList?
     
     private var operation: (()->Void)? = nil
+    var user: SPTUser?
     
     var accessToken: String? {
         return SPTAuth.defaultInstance().session.accessToken
@@ -44,53 +38,48 @@ class SpotifyManager {
     
     // MARK: - Playlist
     
-    func getCurrentUserPlaylists(_ sender: UIViewController, isFirstRun: Bool = false, completion: @escaping ((_ error: Error?, _ playlistList: [SPTPartialPlaylist])->())) {
+    func getCurrentUserPlaylists( completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyPlaylistList?)->())) {
         if let user = user {
-            getPlaylistListForUser(sender, name: user.canonicalUserName, completion: completion)
+            getPlaylistListForUser(name: user.canonicalUserName, completion: completion)
         } else {
-            getCurrentUser(sender, completion: {[weak self] (error, user) in
+            getCurrentUser(completion: {[weak self] (error, user) in
                 guard let sself = self, let user = user else {
-                    completion(error, [])
+                    completion(error, nil)
                     return
                 }
-                sself.getPlaylistListForUser(sender, name: user.canonicalUserName, completion: completion)
+                sself.getPlaylistListForUser(name: user.canonicalUserName, completion: completion)
             })
         }
     }
     
-    func getPlaylistListForUser(_ sender: UIViewController, name: String, isFirstRun: Bool = false, completion: @escaping ((_ error: Error?, _ playlistList: [SPTPartialPlaylist])->())) {
-        parentController = sender
+    func getPlaylistListForUser(name: String, completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyPlaylistList?)->())) {
+        guard let accessToken = accessToken else {return}
+        var block: ((Bool)->Void)!
         
-        SPTPlaylistList.playlists(forUser: name, withAccessToken: accessToken!, callback: {[weak self] (error, data) in
-            guard let sself = self else {return}
-            sself.getPlaylistListCompletion(error: error, data: data, completion: completion)
-        })
-    }
-    
-    func getNextPagePlaylistList(completion: @escaping ((_ error: Error?, _ playlistList: [SPTPartialPlaylist])->())) {
-        guard let playlistListPage = playlistListPage else {
-            completion(nil, [])
-            return
+        block = {(retryOnError: Bool) in
+            SPTPlaylistList.playlists(forUser: name, withAccessToken: accessToken, callback: {[weak self] (error, data) in
+                guard let sself = self else {return}
+                SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: data as? SPTListPage, operation: block, completion: {[weak sself] (error, data) in
+                    guard let ssself = sself else{return}
+                    ssself.getPlaylistListCompletion(error: error, data: data, completion: completion)
+                })
+            })
         }
-        playlistListPage.requestNextPage(withAccessToken: accessToken!) {[weak self] (error, data) in
-            guard let sself = self else {return}
-            sself.getPlaylistListCompletion(error: error, data: data, completion: completion)
-        }
+        block(true)
     }
     
     //MARK: - user request
     
-    func getCurrentUser(_ sender: UIViewController, completion: @escaping ((_ error: Error?, _ user: SPTUser?)->())) {
-        SPTUser.requestCurrentUser(withAccessToken: accessToken!) {[weak self] (error, user) in
-            guard let sself = self else {return}
-            guard error == nil else {
-                sself.errorHandler(error!)
-                completion(error, nil)
-                return
+    func getCurrentUser( completion: @escaping ((_ error: Error?, _ user: SPTUser?)->()) ) {
+        guard let accessToken = accessToken else {return}
+        var block: ((Bool)->Void)!
+    
+        block = {(retryOnError: Bool) in
+            SPTUser.requestCurrentUser(withAccessToken: accessToken) {(error, user) in
+                SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: user as? SPTUser, operation: block, completion: completion)
             }
-            self?.user = user as? SPTUser
-            completion(error, user as? SPTUser)
         }
+        block(true)
     }
     
     /**
@@ -133,30 +122,25 @@ class SpotifyManager {
         sender.present(authViewController, animated: true, completion: nil)
     }
     
-    func renewSession(completion: @escaping () -> Void) { // need token refresh service
+    static func renewSession(completion: @escaping (_ success: Bool) -> Void) { // need token refresh service
         guard let sesion = SPTAuth.defaultInstance().session else {return}
         SPTAuth.defaultInstance().renewSession(sesion) { (error, session) in
-            print("erorr = \(error)")
-            print("session = \(session)")
-            completion()
+            completion(error != nil)
         }
     }
     
     // MARK: - Completion handler
     
-    private func getPlaylistListCompletion(error: Error?, data: Any?, isFirstRun: Bool = false, completion: @escaping ((_ error: Error?, _ playlistList: [SPTPartialPlaylist])->())) {
+    private func getPlaylistListCompletion(error: Error?, data: SPTListPage?, completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyPlaylistList?)->())) {
         guard error == nil else {
-            completion(error, [])
-            errorHandler(error!)
+            completion(error, nil)
             return
         }
-        guard let playListList = data as? SPTPlaylistList, let playlistItems = playListList.items as? [SPTPartialPlaylist] else {
-            completion(error, [])
+        guard let playListList = data as? SPTPlaylistList else {
+            completion(error, nil)
             return
         }
-        playlistListPage = playListList
-        completion(nil, playlistItems)
-        // SPTPlaylistSnapshot.playlist(withURI: playListList, accessToken: <#T##String!#>, callback: <#T##SPTRequestCallback!##SPTRequestCallback!##(Error?, Any?) -> Void#>)
+        completion(nil, SpotifyPlaylistList(playlistListPage: playListList))
     }
     
     private func handleAuthCallback(_ error: Error?, session: SPTSession?) {
@@ -167,15 +151,18 @@ class SpotifyManager {
     
     // MARK: Error handler
     
-    private func errorHandler(_ error: Error?) {
-        guard let error = error as NSError? else { return }
-        print(error)
+    static func errorHandler<T>(_ error: Error?, retryOnError: Bool, data: T?, operation: @escaping (_ flag: Bool)->(), completion: (_ error: Error?, _ data: T?) -> ()) {
+        guard let error = error as NSError? else {
+            completion(nil, data)
+            return
+        }
         
-        if error.code == 401 {
-            renewSession(completion: {
-                
+        if retryOnError && error.code == NSURLErrorUserCancelledAuthentication {
+            SpotifyManager.renewSession(completion: { (success) in
+                operation(false)
             })
-            
+        } else {
+            completion(error, data)
         }
     }
     

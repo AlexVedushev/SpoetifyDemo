@@ -11,8 +11,7 @@ import Spartan
 
 class PlayListListTableVC: UITableViewController {
     
-    var paginationObject: PagingObject<SimplifiedPlaylist>?
-    var playlistList: [SPTPartialPlaylist] = []
+    var playlistListObj: SpotifyPlaylistList?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,13 +30,13 @@ class PlayListListTableVC: UITableViewController {
     
     private func addInfiniteScroll() {
         tableView.addInfiniteScroll {[weak self] (tableView) in
-            guard let sself = self else {return}
-            sself.paginationObject?.getNext(success: { (pagObject) in
-                guard let ssself = self else {return}
-                ssself.paginationObject = pagObject
-                ssself.tableView.reloadData()
-            }, failure: { (error) in
-                print(error)
+            guard let sself = self, let playlistListObj = sself.playlistListObj else {return}
+            playlistListObj.getNextPagePlaylistList(completion: { (error, playlistList) in
+                guard let sself = self else {return}
+                
+                if let error = error {
+                    sself.showErrorAlert(message: error.localizedDescription)
+                }
             })
         }
     }
@@ -51,20 +50,21 @@ class PlayListListTableVC: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return playlistList.count
+        return playlistListObj?.playlistList.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: PlayListTVCell.self), for: indexPath) as! PlayListTVCell
-        let playlist = playlistList[indexPath.row]
+        let playlist = playlistListObj!.playlistList[indexPath.row]
         cell.setupData(listName: playlist.name, trackCount: Int(playlist.trackCount), imageURi: playlist.smallestImage.imageURL)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let playlist = playlistList[indexPath.row]
+        let playlist = playlistListObj!.playlistList[indexPath.row]
         let vc = VCEnum.tracklist.vc as! TrackListVC
         
+//
         show(vc, sender: self)
     }
 
@@ -72,18 +72,27 @@ class PlayListListTableVC: UITableViewController {
     // MARK: - Helpers metods
     
     private func getFirstPage() {
-        SpotifyManager.share.getCurrentUserPlaylists(self) {[weak self] (error, playlist) in
-            guard let sself = self, error == nil else {
-                print(error!)
+        SpotifyManager.share.getCurrentUserPlaylists {[weak self] (error, playlistListObj) in
+            guard let sself = self else{return}
+            if let error = error {
+                sself.showErrorAlert(message: error.localizedDescription)
                 return
             }
-            sself.playlistList = playlist
-            sself.reloadTableAndStopRefresh()
+            
+            if let playlistListObj = playlistListObj {
+                sself.playlistListObj = playlistListObj
+                sself.tableView.reloadData()
+            }
         }
     }
     
     private func reloadTableAndStopRefresh() {
         tableView.reloadData()
         refreshControl?.endRefreshing()
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        present(alert, animated: true, completion: nil)
     }
 }
