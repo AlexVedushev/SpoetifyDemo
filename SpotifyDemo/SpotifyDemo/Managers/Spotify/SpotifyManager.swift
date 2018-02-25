@@ -9,6 +9,9 @@
 import Foundation
 import SafariServices
 
+typealias PageResponse = ((_ error: Error?, _ listPage: SpotifyListPage<SPTPlaylistList, SPTPartialPlaylist>?)->())
+typealias PlaylistSnapshotResponse = ((_ error: Error?, _ snapshot: SPTPlaylistSnapshot?)->())
+
 class SpotifyManager {
     
     static let share = SpotifyManager(clientID: "ca19f9334ea84e85a4194cc096dea9f1", redirectURL: URL(string: "spotify-ios-demo-login://")!, sessionUserDefaultsKey: "current session", requestedScopes: [SPTAuthStreamingScope])
@@ -36,9 +39,24 @@ class SpotifyManager {
         return SPTAuth.defaultInstance().session.accessToken
     }
     
-    // MARK: - Playlist
+    //MARK: - Track list
     
-    func getCurrentUserPlaylists( completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyPlaylistList?)->())) {
+    func getTrackList(albumURL: URL, completion: @escaping PlaylistSnapshotResponse) {
+        guard let accessToken = accessToken else {return}
+        var block: ((Bool)->Void)!
+        
+        block = { (retryOnError: Bool) in
+            SPTPlaylistSnapshot.playlist(withURI: albumURL, accessToken: accessToken, callback: {[weak self] (error, data) in
+                guard let sself = self else {return}
+                SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: data as? SPTPlaylistSnapshot, operation: block, completion: completion)
+            })
+        }
+        block(true)
+    }
+    
+    // MARK: - Playlist list
+    
+    func getCurrentUserPlaylists(completion: @escaping PageResponse) {
         if let user = user {
             getPlaylistListForUser(name: user.canonicalUserName, completion: completion)
         } else {
@@ -52,7 +70,7 @@ class SpotifyManager {
         }
     }
     
-    func getPlaylistListForUser(name: String, completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyPlaylistList?)->())) {
+    func getPlaylistListForUser(name: String, completion: @escaping PageResponse) {
         guard let accessToken = accessToken else {return}
         var block: ((Bool)->Void)!
         
@@ -131,7 +149,7 @@ class SpotifyManager {
     
     // MARK: - Completion handler
     
-    private func getPlaylistListCompletion(error: Error?, data: SPTListPage?, completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyPlaylistList?)->())) {
+    private func getPlaylistListCompletion(error: Error?, data: SPTListPage?, completion: @escaping ((_ error: Error?, _ playlistManager: SpotifyListPage<SPTPlaylistList, SPTPartialPlaylist>?)->())) {
         guard error == nil else {
             completion(error, nil)
             return
@@ -140,7 +158,7 @@ class SpotifyManager {
             completion(error, nil)
             return
         }
-        completion(nil, SpotifyPlaylistList(playlistListPage: playListList))
+        completion(nil, SpotifyListPage(playlistListPage: playListList))
     }
     
     private func handleAuthCallback(_ error: Error?, session: SPTSession?) {

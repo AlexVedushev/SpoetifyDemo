@@ -1,5 +1,5 @@
 //
-//  SpotifyPlaylistList.swift
+//  SpotifyListPage.swift
 //  SpotifyDemo
 //
 //  Created by Alexey Vedushev on 19/02/2018.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-class SpotifyPlaylistList {
-    private var playlistListPage: SPTPlaylistList!
-    var playlistList: [SPTPartialPlaylist] = []
+class SpotifyListPage<T: SPTListPage, S: SPTJSONObject> {
+    private var playlistListPage: T!
+    var playlistList: [S] = []
     
-    init(playlistListPage: SPTPlaylistList) {
+    init(playlistListPage: T) {
         self.playlistListPage = playlistListPage
-        self.playlistList = playlistListPage.items as! [SPTPartialPlaylist]
+        self.playlistList = playlistListPage.items as! [S]
     }
     
     var accessToken: String? {
         return SpotifyManager.share.accessToken
     }
     
-    func getNextPagePlaylistList(completion: @escaping ((_ error: Error?, _ playlistList: [SPTPartialPlaylist])->())) {
+    func getNextPagePlaylistList(completion: @escaping ((_ error: Error?, _ playlistList: [Any])->())) {
         guard let playlistListPage = playlistListPage, let accessToken = accessToken else {
             completion(nil, [])
             return
@@ -35,8 +35,8 @@ class SpotifyPlaylistList {
                     guard let ssself = sself else {return}
                     
                     if error == nil {
-                        ssself.playlistListPage = data as! SPTPlaylistList
-                        ssself.playlistList.append(contentsOf: ssself.playlistListPage.items as! [SPTPartialPlaylist])
+                        ssself.playlistListPage = data as! T
+                        ssself.playlistList.append(contentsOf: ssself.playlistListPage.items as! [S])
                     }
                     completion(error, ssself.playlistList)
                 })

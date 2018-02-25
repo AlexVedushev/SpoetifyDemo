@@ -11,7 +11,7 @@ import Spartan
 
 class PlayListListTableVC: UITableViewController {
     
-    var playlistListObj: SpotifyPlaylistList?
+    var playlistListObj: SpotifyListPage<SPTPlaylistList, SPTPartialPlaylist>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +63,9 @@ class PlayListListTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let playlist = playlistListObj!.playlistList[indexPath.row]
         let vc = VCEnum.tracklist.vc as! TrackListVC
-        
+        SpotifyManager.share.getTrackList(albumURL: playlist.playableUri) { (error, listPage) in
+            
+        }
 //
         show(vc, sender: self)
     }
