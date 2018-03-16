@@ -8,10 +8,9 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
 
 
-public typealias JSONResponseBlock = (JSON?, NSError?) -> Void
+public typealias DataResponseBlock = (Data?, NSError?) -> Void
 public typealias BooleanBlock = (Bool, NSError?) -> Void
 public typealias StringBlock = (String?, NSError?) -> Void
 
@@ -24,7 +23,7 @@ class APIBase {
     
     // MARK: - API Methods
     
-    func request(_ urlRequest: URLRequestConvertible, credential: URLCredential? = nil, completion: @escaping JSONResponseBlock) {
+    func request(_ urlRequest: URLRequestConvertible, credential: URLCredential? = nil, completion: @escaping DataResponseBlock) {
         
         Alamofire.request(urlRequest)
             .validate()
@@ -66,16 +65,27 @@ class APIBase {
                     completion(nil, outError)
                     
                 } else if let data = response.data {
-                    let json = JSON(data: data)
-                    
+                    completion(data, nil)
                     #if DEBUG
-                        if kPrintAllApiResponses {
-                            print("\nResponse:\n \(json)\n ")
+                        do{
+                            let decoded = try JSONSerialization.jsonObject(with: data, options: [])
+                            
+                            guard let dictFromJSON = decoded as? [String : Any] else {
+                                return
+                            }
+                            
+                                if kPrintAllApiResponses {
+                                    print("\nResponse:\n \(dictFromJSON)\n ")
+                                }
+                            
+                        } catch {
+                            completion(nil, error as NSError)
+                            print(error.localizedDescription)
                         }
                     #endif
-                    
-                    completion(json, nil)
+                    return
                 }
+                completion(nil, nil)
         }
     }
     

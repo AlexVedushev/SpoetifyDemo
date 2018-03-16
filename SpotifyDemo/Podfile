@@ -10,16 +10,28 @@ target 'SpotifyDemo' do
 
   # Pods for SpotifyDemo
 
-pod 'ORCoreData', '~> 3.1.0'
-pod 'ORCommonCode-Swift', '~> 3.0.2'
-pod 'ORCommonUI-Swift', '~> 3.8.2'
+    pod 'ORCoreData', '~> 3.1.0'
+    pod 'ORCommonCode-Swift', '~> 3.0.2'
+    pod 'ORCommonUI-Swift', '~> 3.8.2'
 
-  pod 'Alamofire', '~> 4.3'
-  pod 'AlamofireImage', '~> 3.2'
-  pod 'SwiftyJSON', '~> 3.1'
-  pod 'Spartan'
-  
-  pod 'UIScrollView-InfiniteScroll'
-  
-  pod 'LGSideMenuController', '~> 2.1.1'
+    pod 'Alamofire', '~> 4.3'
+    pod 'AlamofireImage', '~> 3.2'
+    pod 'Spartan'
+
+    pod 'UIScrollView-InfiniteScroll'
+
+    pod 'LGSideMenuController', '~> 2.1.1'
+    
+    post_install do |installer|
+        # Your list of targets here.
+        myTargets = ['ORCommonCode-Swift', 'ORCommonUI-Swift']
+        
+        installer.pods_project.targets.each do |target|
+            if myTargets.include? target.name
+                target.build_configurations.each do |config|
+                    config.build_settings['SWIFT_VERSION'] = '3.2'
+                end
+            end
+        end
+    end
 end

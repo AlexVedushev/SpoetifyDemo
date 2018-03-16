@@ -33,7 +33,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     
     var searchType: SearchType = .track
     
-    var pagingObject: PagingObject<Track>?
+    var spTrackListPage: SpotifyListPage<SPTListPage, SPTPartialTrack>?
     var listPage: SPTListPage?
     var dataList: [Track] = []
     
@@ -69,8 +69,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         search(searchBar.text ?? "")
-        searchSpotifySDK()
-        
     }
     
     //MARK: - UITableViewDataSource
@@ -91,62 +89,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     
     private func getCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: SearchTVCell.self)) as! SearchTVCell
-        
-        if let itemList = dataList as? [Track] {
-            cell.setup(name: (itemList[indexPath.row].name)!, imagePath: itemList[indexPath.row].album.images.first?.url)
-        }
+//        cell.setup(name: (dataList[indexPath.row].name)!, imagePath: dataList[indexPath.row].album.images.first?.url)
         return cell
     }
     
     //MARK: Data
     
     private func search(_ text: String) {
-        Spartan.search(query: searchBar.text ?? "", type: searchType.spartanSearchType, success: {[weak self] (pagObj: PagingObject<Track>) in
-            guard let sself = self else {return}
-            sself.pagingObject = pagObj
-            sself.dataList = pagObj.items
-            sself.tableView.reloadData()
-        }) { (error) in
-            if error.errorType == .unauthorized {
-                Spartan.authorizationToken = SPTAuth.defaultInstance().session.accessToken
+        SpotifyManager.share.searchTrack(text) {[weak self] (eror, spListPage) in
+            if let ids = (spListPage?.itemList.map{$0.identifier!}) {
+                
             }
-            print(error)
+            
         }
     }
     
     private func getNextPage() {
-        guard let pagObj = pagingObject else {
-            search(searchBar.text ?? "")
-            return
-        }
-        pagObj.getNext(success: {[weak self] (pagObj) in
-            guard let sself = self else {return}
-            sself.tableView.finishInfiniteScroll()
-            sself.pagingObject = pagObj
-            sself.dataList.append(contentsOf: pagObj.items ?? [])
-            sself.tableView.reloadData()
-        }) {[weak self] (error) in
-            guard let sself = self else {return}
-            sself.tableView.finishInfiniteScroll()
-            print(error)
-        }
-        guard let accessToken = getAccessToken() else {
-            return
-        }
-        listPage?.requestNextPage(withAccessToken: accessToken, callback: { (error, response) in
-            print(response)
-        })
-    }
-    
-    private func searchSpotifySDK() {
-        guard let accessToken = getAccessToken() else {return}
         
-        SPTSearch.perform(withQuery: searchBar.text ?? "", queryType: SPTSearchQueryType.queryTypeTrack, accessToken: accessToken) {[weak self] (error, data) in
-            guard let sself = self, let listPage = data as? SPTListPage else {return}
-            let trackList = (listPage.items as? [SPTPartialTrack]) ?? []
-            sself.listPage = listPage
-            print("listPage.items = \(listPage.items.count)")
-        }
     }
     
     private func getAccessToken() -> String? {

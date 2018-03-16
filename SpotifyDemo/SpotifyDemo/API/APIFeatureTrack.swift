@@ -8,9 +8,8 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
 
-class APIFeatureTrack: APIBase {
+class APIFeatureTrack: APIBase, APIFeatureTrackProtocol {
     
     private enum Router: URLRequestConvertible {
         case audioFeatures(idsList: [String])
@@ -27,7 +26,7 @@ class APIFeatureTrack: APIBase {
         var method: Alamofire.HTTPMethod {
             switch self {
             case .audioFeatures:
-                return .post
+                return .get
             default:
                 return .post
             }
@@ -41,7 +40,9 @@ class APIFeatureTrack: APIBase {
             
             switch self {
             case .audioFeatures(let idsList):
-                url = URL(string: appBaseURL)!.urlByAppendingQueryParameters(parameters: ["ids" : idsList.joined(separator: ",")])
+                url = URL(string: appBaseURL)!
+                url.appendPathComponent(path)
+                url = url.urlByAppendingQueryParameters(parameters: ["ids" : idsList.joined(separator: ",")])
                 urlRequest = URLRequest(url: url)
             }
             urlRequest.httpMethod = method.rawValue
@@ -51,7 +52,7 @@ class APIFeatureTrack: APIBase {
     
     //MARK: - API methdos
     
-    func getFeatureTrack(ids: [String], completion: @escaping  JSONResponseBlock) {
+    func getFeatureTrack(ids: [String], completion: @escaping  DataResponseBlock) {
         request(Router.audioFeatures(idsList: ids)) { (json, error) in
             completion(json, error)
         }

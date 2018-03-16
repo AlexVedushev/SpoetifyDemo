@@ -12,7 +12,6 @@ import AlamofireImage
 class SearchTVCell: UITableViewCell {
 
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var previewImageView: UIImageView!
     
     
     override func awakeFromNib() {
@@ -21,14 +20,9 @@ class SearchTVCell: UITableViewCell {
     }
 
     
-    func setup(name: String, imagePath: String? = nil) {
+    func setup(name: String, temp: Double) {
         nameLabel.text = name
-        previewImageView.isHidden = true
         
-        if let path = imagePath, let url = URL(string: path) {
-            previewImageView.af_setImage(withURL: url)
-            previewImageView.isHidden = false
-        }
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

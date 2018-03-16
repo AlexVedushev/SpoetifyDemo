@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:SpotifyDemo/Storyboards/Base.lproj/PlayList.storyboard">
+   </FileRef>
+   <FileRef
       location = "group:SpotifyDemo.xcodeproj">
    </FileRef>
    <FileRef

@@ -9,6 +9,7 @@
 import UIKit
 import SafariServices
 import Spartan
+import MagicalRecord
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, SPTAudioStreamingDelegate, SFSafariViewControllerDelegate {
@@ -27,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SPTAudioStreamingDelegate
         auth.sessionUserDefaultsKey = "current session"
         auth.requestedScopes = [SPTAuthStreamingScope]
         player.delegate = self
+        
+        MagicalRecord.setupCoreDataStack(withAutoMigratingSqliteStoreNamed: "Instructrr")
         return true
     }
 

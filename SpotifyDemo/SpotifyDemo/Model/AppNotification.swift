@@ -10,6 +10,7 @@ import Foundation
 
 enum AppNotification: String {
     case AppNotificationServerErrorInvalidToken
+    case AppNotificationSpotifySessionDidUpdate
     
     var name: NSNotification.Name {
         return NSNotification.Name(self.rawValue)

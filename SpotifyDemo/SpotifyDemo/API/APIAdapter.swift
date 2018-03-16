@@ -23,14 +23,15 @@ class APIAdapter: RequestAdapter {
         let requestString = urlRequest.url?.absoluteString ?? ""
         
         if accessToken.count > 0 {
-            let value = /*(urlRequest.url?.absoluteString ?? "").contains(kGraphQLServerBaseURLString) ? accessToken :*/ "BEARER " + accessToken
+            let value = /*(urlRequest.url?.absoluteString ?? "").contains(kGraphQLServerBaseURLString) ? accessToken :*/ "Bearer " + accessToken
             urlRequest.setValue(value, forHTTPHeaderField: "Authorization")
         }
         
         if !requestString.contains("oauth/token"), urlRequest.httpMethod == Alamofire.HTTPMethod.post.rawValue {
 //            let value = requestString.contains(kGraphQLServerBaseURLString) ? "application/json" : "application/x-www-form-urlencoded"
-            let value = "application/x-www-form-urlencoded"
+            let value = "application/json"
             urlRequest.setValue(value, forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue(value, forHTTPHeaderField: "Accept")
         }
         
         return urlRequest

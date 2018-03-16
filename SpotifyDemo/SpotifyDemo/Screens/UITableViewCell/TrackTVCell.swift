@@ -10,28 +10,31 @@ import UIKit
 import AlamofireImage
 
 class TrackTVCell: UITableViewCell {
+    struct  Data {
+        let position: Int
+        let name: String
+        let artistName: String
+        let durationStr: String
+        let bpm: Double
+    }
+    
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var artistNameLabel: UILabel!
-    @IBOutlet weak var coverImageView: UIImageView!
+    @IBOutlet weak var durationLabel: UILabel!
+    @IBOutlet weak var bpmLabel: UILabel!
+    @IBOutlet weak var positionLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
-    func setup(track: SPTPartialTrack) {
-        trackNameLabel.text = track.name
-        artistNameLabel.text = track.album.name
-        coverImageView.af_setImage(withURL: track.previewURL)
-    }
-    
-    func setup(name: String, artistName: String, previewURL: String) {
-        trackNameLabel.text = name
-        artistNameLabel.text = artistName
-        
-        if let url = URL(string: previewURL) {
-            coverImageView.af_setImage(withURL: url)
-        }
+    func setup(data: Data){
+        positionLabel.text = "\(data.position)"
+        trackNameLabel.text = data.name
+        artistNameLabel.text = data.artistName
+        durationLabel.text = data.durationStr
+        bpmLabel.text = "bpm: \(Int(data.bpm))"
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
