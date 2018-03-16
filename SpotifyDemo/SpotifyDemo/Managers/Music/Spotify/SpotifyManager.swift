@@ -8,13 +8,15 @@
 
 import Foundation
 import SafariServices
+import ORCommonCode_Swift
 
-typealias PageResponse = ((_ error: Error?, _ listPage: SpotifyListPage<SPTPlaylistList, SPTPartialPlaylist>?)->())
-typealias PlaylistSnapshotResponse = ((_ error: Error?, _ snapshot: SPTPlaylistSnapshot?)->())
+typealias PlaylistListPageResponse = ((_ error: Error?, _ listPage: SpotifyListPage<SPTPlaylistList, SPTPartialPlaylist>?)->())
+typealias TrackListPageResponse = ((_ error: Error?, _ listPage: SpotifyListPage<SPTListPage, SPTPartialTrack>?)->())
+typealias PlaylistSnapshotResponse = ((_ error: Error?, _ snapshot: SpotifyPlaylistSnapshot?)->())
 
 class SpotifyManager {
     
-    static let share = SpotifyManager(clientID: "ca19f9334ea84e85a4194cc096dea9f1", redirectURL: URL(string: "spotify-ios-demo-login://")!, sessionUserDefaultsKey: "current session", requestedScopes: [SPTAuthStreamingScope])
+    static let share = SpotifyManager(clientID: "f2b685ef7a1f419bb0ac6b4f1cbc45f5", redirectURL: URL(string: "spotify-ios-demo-login://")!, sessionUserDefaultsKey: "current session", requestedScopes: [SPTAuthStreamingScope])
     
     init(clientID: String, redirectURL: URL, sessionUserDefaultsKey: String, requestedScopes: [Any]) {
         auth = SPTAuth.defaultInstance()
@@ -23,7 +25,7 @@ class SpotifyManager {
         auth.redirectURL = redirectURL
         auth.sessionUserDefaultsKey = sessionUserDefaultsKey
         auth.requestedScopes =  requestedScopes
-//        player.delegate = self
+        
     }
     
     
@@ -36,19 +38,44 @@ class SpotifyManager {
     var user: SPTUser?
     
     var accessToken: String? {
-        return SPTAuth.defaultInstance().session.accessToken
+        return SPTAuth.defaultInstance().session?.accessToken
     }
     
     //MARK: - Track list
     
-    func getTrackList(albumURL: URL, completion: @escaping PlaylistSnapshotResponse) {
+    func getPlaylistSnapshot(playlistURL: URL, completion: @escaping PlaylistSnapshotResponse) {
         guard let accessToken = accessToken else {return}
         var block: ((Bool)->Void)!
         
         block = { (retryOnError: Bool) in
-            SPTPlaylistSnapshot.playlist(withURI: albumURL, accessToken: accessToken, callback: {[weak self] (error, data) in
-                guard let sself = self else {return}
-                SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: data as? SPTPlaylistSnapshot, operation: block, completion: completion)
+            
+            SPTPlaylistSnapshot.playlist(withURI: playlistURL, accessToken: accessToken, callback: {(error, data) in
+                SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: data as? SPTPlaylistSnapshot, operation: block, completion: { (error, data) in
+                    guard let snapshot = data else {
+                        if error != nil {
+                            print(error!)
+                        }
+                        completion(error, nil)
+                        return
+                    }
+                    let spSnapshot = SpotifyPlaylistSnapshot(snapshot: snapshot)
+                    completion(nil, spSnapshot)
+                })
+            })
+        }
+        block(true)
+    }
+    
+    func searchTrack(_ searchTrack: String, completion: @escaping TrackListPageResponse) {
+        guard let accessToken = accessToken else {return}
+        var block: ((Bool)->Void)!
+        
+        block = { (retryOnError: Bool) in
+            SPTSearch.perform(withQuery: searchTrack, queryType: .queryTypeTrack, accessToken: accessToken, callback: {(error, data) in
+                SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: data as? SPTListPage, operation: block, completion: {(error, data) in
+                    guard let data = data  else {return}
+                    completion(error, SpotifyListPage(listPage: data))
+                })
             })
         }
         block(true)
@@ -56,7 +83,7 @@ class SpotifyManager {
     
     // MARK: - Playlist list
     
-    func getCurrentUserPlaylists(completion: @escaping PageResponse) {
+    func getCurrentUserPlaylists(completion: @escaping PlaylistListPageResponse) {
         if let user = user {
             getPlaylistListForUser(name: user.canonicalUserName, completion: completion)
         } else {
@@ -70,7 +97,7 @@ class SpotifyManager {
         }
     }
     
-    func getPlaylistListForUser(name: String, completion: @escaping PageResponse) {
+    func getPlaylistListForUser(name: String, completion: @escaping PlaylistListPageResponse) {
         guard let accessToken = accessToken else {return}
         var block: ((Bool)->Void)!
         
@@ -126,6 +153,9 @@ class SpotifyManager {
             authViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
             authViewController = nil
             auth.handleAuthCallback(withTriggeredAuthURL: url, callback: {[weak self] (error, session) in
+                if let accessToken = session?.accessToken {
+                    APIBase.setAccessToken(accessToken)
+                }
                 self?.handleAuthCallback(error, session: session)
             })
             return true
@@ -158,12 +188,13 @@ class SpotifyManager {
             completion(error, nil)
             return
         }
-        completion(nil, SpotifyListPage(playlistListPage: playListList))
+        completion(nil, SpotifyListPage(listPage: playListList))
     }
     
     private func handleAuthCallback(_ error: Error?, session: SPTSession?) {
         if let auth = auth, session != nil {
-            player.login(withAccessToken: auth.session.accessToken)
+            or_postNotification(AppNotification.AppNotificationSpotifySessionDidUpdate.rawValue)
+            
         }
     }
     

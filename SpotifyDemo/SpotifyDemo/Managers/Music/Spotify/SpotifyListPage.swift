@@ -9,21 +9,25 @@
 import Foundation
 
 class SpotifyListPage<T: SPTListPage, S: SPTJSONObject> {
-    private var playlistListPage: T!
-    var playlistList: [S] = []
+    var listPage: T!
+    var itemList: [S] = []
     
-    init(playlistListPage: T) {
-        self.playlistListPage = playlistListPage
-        self.playlistList = playlistListPage.items as! [S]
+    init(listPage: T) {
+        self.listPage = listPage
+        self.itemList = (listPage.items as? [S]) ?? [S]()
     }
     
     var accessToken: String? {
         return SpotifyManager.share.accessToken
     }
     
-    func getNextPagePlaylistList(completion: @escaping ((_ error: Error?, _ playlistList: [Any])->())) {
-        guard let playlistListPage = playlistListPage, let accessToken = accessToken else {
+    func getNextPage(completion: @escaping ((_ error: Error?, _ itemList: [S])->())) {
+        guard let playlistListPage = listPage, let accessToken = accessToken else {
             completion(nil, [])
+            return
+        }
+        guard listPage.hasNextPage else {
+            completion(nil, itemList)
             return
         }
         var block: ((Bool)->Void)!
@@ -35,20 +39,13 @@ class SpotifyListPage<T: SPTListPage, S: SPTJSONObject> {
                     guard let ssself = sself else {return}
                     
                     if error == nil {
-                        ssself.playlistListPage = data as! T
-                        ssself.playlistList.append(contentsOf: ssself.playlistListPage.items as! [S])
+                        ssself.listPage = data as! T
+                        ssself.itemList.append(contentsOf: ssself.listPage.items as! [S])
                     }
-                    completion(error, ssself.playlistList)
+                    completion(error, ssself.itemList)
                 })
             }
         }
         block(true)
-    }
-    
-    private func getPlaylistListFrom( _ listPage: SPTListPage) -> [SPTPartialPlaylist] {
-        guard let playListList = listPage as? SPTPlaylistList, let playlistItems = playListList.items as? [SPTPartialPlaylist] else {
-            return []
-        }
-        return playlistItems
     }
 }
