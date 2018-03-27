@@ -28,5 +28,8 @@ class SpotifyPlaylistSnapshot: SpotifyPlaylist {
         trackListPage?.getNextPageIfAvailable { (error, trackList) in
             completion(trackList)
         }
+        
     }
+    
+    
 }

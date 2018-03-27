@@ -18,7 +18,7 @@
 
 @class SPTUser;
 
-/** Represents a track in a playlist on the Spotify service. */
+/** Represents a track in a  on the Spotify service. */
 @interface SPTPlaylistTrack : SPTTrack <SPTJSONObject>
 
 /** The date when the track was added. */

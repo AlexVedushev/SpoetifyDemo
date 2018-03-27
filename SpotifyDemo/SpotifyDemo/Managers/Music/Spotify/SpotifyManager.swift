@@ -25,7 +25,7 @@ class SpotifyManager {
         auth.redirectURL = redirectURL
         auth.sessionUserDefaultsKey = sessionUserDefaultsKey
         auth.requestedScopes =  requestedScopes
-        
+        player.diskCache = SPTDiskCache(capacity: 1024 * 1024 * 64)
     }
     
     
@@ -194,7 +194,6 @@ class SpotifyManager {
     private func handleAuthCallback(_ error: Error?, session: SPTSession?) {
         if let auth = auth, session != nil {
             or_postNotification(AppNotification.AppNotificationSpotifySessionDidUpdate.rawValue)
-            
         }
     }
     

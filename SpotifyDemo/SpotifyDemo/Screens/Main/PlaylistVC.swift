@@ -103,6 +103,10 @@ class PlaylistVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         UIView.commitAnimations()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
     //MARK: - Helper methods
     
     private func getNextPage(completion: (()->Void)? = nil) {
