@@ -8,6 +8,7 @@
 
 import Foundation
 
-protocol APIFeatureTrackProtocol: class {
+protocol APISpotifyProtocol: class {
     func getFeatureTrack(ids: [String], completion: @escaping  DataResponseBlock)
+    func getAudioAnalysisFor(id: String, completion: @escaping  DataResponseBlock)
 }

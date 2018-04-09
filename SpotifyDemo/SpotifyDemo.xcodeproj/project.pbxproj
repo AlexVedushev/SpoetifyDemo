@@ -13,9 +13,10 @@
 		CF22A148203599F600D8D8C4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A147203599F600D8D8C4 /* SearchViewController.swift */; };
 		CF22A14A2035A64A00D8D8C4 /* SearchTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22A1492035A64A00D8D8C4 /* SearchTVCell.swift */; };
 		CF2E3258205BD00E00BED8EC /* PlayList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF2E3257205BD00E00BED8EC /* PlayList.storyboard */; };
+		CF5C1D13207B978900506EA7 /* SpotifyAudioAnalysisManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C1D12207B978900506EA7 /* SpotifyAudioAnalysisManager.swift */; };
 		CF5E306F20356CB10007F506 /* APIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306A20356CB00007F506 /* APIAdapter.swift */; };
 		CF5E307020356CB10007F506 /* APIBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306B20356CB00007F506 /* APIBase.swift */; };
-		CF5E307120356CB10007F506 /* APIFeatureTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306C20356CB00007F506 /* APIFeatureTrack.swift */; };
+		CF5E307120356CB10007F506 /* APISpotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306C20356CB00007F506 /* APISpotify.swift */; };
 		CF5E307220356CB10007F506 /* ServerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306D20356CB00007F506 /* ServerError.swift */; };
 		CF5E307320356CB10007F506 /* URLRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E306E20356CB00007F506 /* URLRequestBuilder.swift */; };
 		CF5E307520356CBF0007F506 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E307420356CBF0007F506 /* AppConfig.swift */; };
@@ -31,7 +32,6 @@
 		CF5E309120356CDE0007F506 /* BaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E308820356CDE0007F506 /* BaseError.swift */; };
 		CF5E309320356CE50007F506 /* VCEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5E309220356CE50007F506 /* VCEnum.swift */; };
 		CF5E309720356D050007F506 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF5E309520356D050007F506 /* Main.storyboard */; };
-		CF77F522204D2AA90023F313 /* AudioFeaturesListMapObj.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF77F521204D2AA90023F313 /* AudioFeaturesListMapObj.swift */; };
 		CF77F526204D35830023F313 /* APIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF77F525204D35830023F313 /* APIProtocol.swift */; };
 		CF8E2F6C205A621A007F0A5D /* SPTPatialTrack+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8E2F6B205A621A007F0A5D /* SPTPatialTrack+Extension.swift */; };
 		CF9F039E2058F9FB00FAC963 /* Instructrr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CF9F039C2058F9FB00FAC963 /* Instructrr.xcdatamodeld */; };
@@ -65,9 +65,10 @@
 		CF22A147203599F600D8D8C4 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		CF22A1492035A64A00D8D8C4 /* SearchTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTVCell.swift; sourceTree = "<group>"; };
 		CF2E3257205BD00E00BED8EC /* PlayList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PlayList.storyboard; sourceTree = "<group>"; };
+		CF5C1D12207B978900506EA7 /* SpotifyAudioAnalysisManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAudioAnalysisManager.swift; sourceTree = "<group>"; };
 		CF5E306A20356CB00007F506 /* APIAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIAdapter.swift; sourceTree = "<group>"; };
 		CF5E306B20356CB00007F506 /* APIBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIBase.swift; sourceTree = "<group>"; };
-		CF5E306C20356CB00007F506 /* APIFeatureTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIFeatureTrack.swift; sourceTree = "<group>"; };
+		CF5E306C20356CB00007F506 /* APISpotify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APISpotify.swift; sourceTree = "<group>"; };
 		CF5E306D20356CB00007F506 /* ServerError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
 		CF5E306E20356CB00007F506 /* URLRequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestBuilder.swift; sourceTree = "<group>"; };
 		CF5E307420356CBF0007F506 /* AppConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
@@ -83,7 +84,6 @@
 		CF5E308820356CDE0007F506 /* BaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseError.swift; sourceTree = "<group>"; };
 		CF5E309220356CE50007F506 /* VCEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCEnum.swift; sourceTree = "<group>"; };
 		CF5E309620356D050007F506 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CF77F521204D2AA90023F313 /* AudioFeaturesListMapObj.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFeaturesListMapObj.swift; sourceTree = "<group>"; };
 		CF77F525204D35830023F313 /* APIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProtocol.swift; sourceTree = "<group>"; };
 		CF8E2F6B205A621A007F0A5D /* SPTPatialTrack+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPTPatialTrack+Extension.swift"; sourceTree = "<group>"; };
 		CF8E2F73205A67ED007F0A5D /* SpotifyDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDemoTests.swift; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 			children = (
 				CF5E306A20356CB00007F506 /* APIAdapter.swift */,
 				CF5E306B20356CB00007F506 /* APIBase.swift */,
-				CF5E306C20356CB00007F506 /* APIFeatureTrack.swift */,
+				CF5E306C20356CB00007F506 /* APISpotify.swift */,
 				CF5E306D20356CB00007F506 /* ServerError.swift */,
 				CF5E306E20356CB00007F506 /* URLRequestBuilder.swift */,
 				CF77F525204D35830023F313 /* APIProtocol.swift */,
@@ -248,7 +248,6 @@
 		CF77F520204D2A930023F313 /* MappperObject */ = {
 			isa = PBXGroup;
 			children = (
-				CF77F521204D2AA90023F313 /* AudioFeaturesListMapObj.swift */,
 				CFBC85D12056B19200E4730D /* FeatureTrackMapper.swift */,
 			);
 			path = MappperObject;
@@ -285,13 +284,14 @@
 		CF9F03A42059381300FAC963 /* Spotify */ = {
 			isa = PBXGroup;
 			children = (
-				CF9F03A82059381300FAC963 /* SpotifyManager.swift */,
 				CF9F03A52059381300FAC963 /* SpotifyFeaturesTrackManager.swift */,
+				CF9F03A82059381300FAC963 /* SpotifyManager.swift */,
 				CF9F03A62059381300FAC963 /* SpotifyHelpers.swift */,
 				CF9F03A72059381300FAC963 /* SpotifyListPage.swift */,
 				CF9F03A92059381300FAC963 /* SpotifyPlaylistSnapshot.swift */,
 				CF9F03AA2059381300FAC963 /* SpotifyTrackInfoListPage.swift */,
 				CF8E2F6B205A621A007F0A5D /* SPTPatialTrack+Extension.swift */,
+				CF5C1D12207B978900506EA7 /* SpotifyAudioAnalysisManager.swift */,
 			);
 			path = Spotify;
 			sourceTree = "<group>";
@@ -503,6 +503,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF9F03AF2059381300FAC963 /* SpotifyPlaylistSnapshot.swift in Sources */,
+				CF5C1D13207B978900506EA7 /* SpotifyAudioAnalysisManager.swift in Sources */,
 				CF5E308C20356CDE0007F506 /* PlaylistVC.swift in Sources */,
 				CF5E308920356CDE0007F506 /* UserInfoManager.swift in Sources */,
 				CF5E309020356CDE0007F506 /* AppNotification.swift in Sources */,
@@ -514,7 +515,6 @@
 				CF5E307520356CBF0007F506 /* AppConfig.swift in Sources */,
 				CF0B044A2036F319002A8FB9 /* BaseVC.swift in Sources */,
 				CF22A14A2035A64A00D8D8C4 /* SearchTVCell.swift in Sources */,
-				CF77F522204D2AA90023F313 /* AudioFeaturesListMapObj.swift in Sources */,
 				CF9F03A22058FEEE00FAC963 /* APIKeys.swift in Sources */,
 				CFBC85D22056B19200E4730D /* FeatureTrackMapper.swift in Sources */,
 				CF9F03B52059387E00FAC963 /* CDTrack+CoreDataClass.swift in Sources */,
@@ -531,7 +531,7 @@
 				CF5E307B20356CD10007F506 /* Logger.swift in Sources */,
 				CF9F03B62059387E00FAC963 /* CDTrack+CoreDataProperties.swift in Sources */,
 				CF22A148203599F600D8D8C4 /* SearchViewController.swift in Sources */,
-				CF5E307120356CB10007F506 /* APIFeatureTrack.swift in Sources */,
+				CF5E307120356CB10007F506 /* APISpotify.swift in Sources */,
 				CF5E309320356CE50007F506 /* VCEnum.swift in Sources */,
 				CF9F03B22059383100FAC963 /* MusicServiceEnum.swift in Sources */,
 				CF5E308E20356CDE0007F506 /* TrackTVCell.swift in Sources */,

@@ -14,7 +14,7 @@ import MagicalRecord
 class SpotifyFeaturesTrackManager: BaseManager {
     static let shared = SpotifyFeaturesTrackManager()
     
-    private let api: APIFeatureTrackProtocol = APIFeatureTrack()
+    private let api: APISpotifyProtocol = APISpotify()
     
     func downloadFeatureForSeveralTracks(ids: [String], completion:@escaping ((_ resultList: [CDTrack]?, _ error: Error?)->Void)) {
         let forDownloadIdList = getIdListForDownloadFeaturesFrom(ids: ids)

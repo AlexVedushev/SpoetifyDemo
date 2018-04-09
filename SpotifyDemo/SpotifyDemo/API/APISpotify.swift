@@ -9,26 +9,26 @@
 import Foundation
 import Alamofire
 
-class APIFeatureTrack: APIBase, APIFeatureTrackProtocol {
+class APISpotify: APIBase, APISpotifyProtocol {
     
     private enum Router: URLRequestConvertible {
         case audioFeatures(idsList: [String])
+        case audioAnalysis(id: String)
+        
         
         var path: String {
             switch self {
             case .audioFeatures:
                 return "audio-features"
-            default:
-                return ""
+            case .audioAnalysis:
+                return "audio-analysis"
             }
         }
         
         var method: Alamofire.HTTPMethod {
             switch self {
-            case .audioFeatures:
+            case .audioFeatures, .audioAnalysis:
                 return .get
-            default:
-                return .post
             }
         }
         
@@ -37,14 +37,16 @@ class APIFeatureTrack: APIBase, APIFeatureTrackProtocol {
         func asURLRequest() throws -> URLRequest {
             var url: URL!
             var urlRequest: URLRequest!
+            url = URL(string: appBaseURL)!
+            url.appendPathComponent(path)
             
             switch self {
             case .audioFeatures(let idsList):
-                url = URL(string: appBaseURL)!
-                url.appendPathComponent(path)
                 url = url.urlByAppendingQueryParameters(parameters: ["ids" : idsList.joined(separator: ",")])
-                urlRequest = URLRequest(url: url)
+            case .audioAnalysis(let id):
+                url = url.urlByAppendingQueryParameters(parameters: ["id" : id])
             }
+            urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = method.rawValue
             return try JSONEncoding.default.encode(urlRequest)
         }
@@ -53,8 +55,14 @@ class APIFeatureTrack: APIBase, APIFeatureTrackProtocol {
     //MARK: - API methdos
     
     func getFeatureTrack(ids: [String], completion: @escaping  DataResponseBlock) {
-        request(Router.audioFeatures(idsList: ids)) { (json, error) in
-            completion(json, error)
+        request(Router.audioFeatures(idsList: ids)) { (data, error) in
+            completion(data, error)
+        }
+    }
+    
+    func getAudioAnalysisFor(id: String, completion: @escaping  DataResponseBlock) {
+        request(Router.audioAnalysis(id: id)) { (data, error) in
+            completion(data, error)
         }
     }
     
