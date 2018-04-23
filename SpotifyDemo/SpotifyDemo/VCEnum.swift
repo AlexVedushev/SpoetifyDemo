@@ -11,10 +11,11 @@ import Foundation
 enum VCEnum {
     case tracklist
     case playListList
+    case player
     
     fileprivate var storyboardName: String {
         switch self {
-        case .tracklist, .playListList:
+        case .tracklist, .playListList, .player:
             return "Main"
         }
     }

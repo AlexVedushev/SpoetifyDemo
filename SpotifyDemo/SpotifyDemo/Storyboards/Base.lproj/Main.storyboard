@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m4i-HX-5e4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m4i-HX-5e4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -264,6 +264,46 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4oN-Wc-I34" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="117.59999999999999" y="118.29085457271366"/>
+        </scene>
+        <!--PlayerVC-->
+        <scene sceneID="xvb-w2-2Lg">
+            <objects>
+                <viewController storyboardIdentifier="player" id="dga-1O-4UL" customClass="PlayerVC" customModule="SpotifyDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1As-Ba-JFJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7t2-Bg-X5Y">
+                                <rect key="frame" x="172.5" y="318.5" width="30" height="30"/>
+                                <state key="normal" title="Play"/>
+                                <state key="selected" title="Pause"/>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M5c-CL-nmY" customClass="ProgressView" customModule="SpotifyDemo" customModuleProvider="target">
+                                <rect key="frame" x="20" y="294.5" width="335" height="4"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="4" id="d2G-za-6A4"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="7t2-Bg-X5Y" firstAttribute="centerY" secondItem="1As-Ba-JFJ" secondAttribute="centerY" id="0gN-h9-hHB"/>
+                            <constraint firstItem="M5c-CL-nmY" firstAttribute="leading" secondItem="rDB-cT-lGO" secondAttribute="leading" constant="20" id="B4V-tb-dXh"/>
+                            <constraint firstItem="7t2-Bg-X5Y" firstAttribute="top" secondItem="M5c-CL-nmY" secondAttribute="bottom" constant="20" id="RKM-xd-dUk"/>
+                            <constraint firstItem="7t2-Bg-X5Y" firstAttribute="centerX" secondItem="1As-Ba-JFJ" secondAttribute="centerX" id="hNB-xg-fXi"/>
+                            <constraint firstItem="rDB-cT-lGO" firstAttribute="trailing" secondItem="M5c-CL-nmY" secondAttribute="trailing" constant="20" id="nEa-PO-GNX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="rDB-cT-lGO"/>
+                    </view>
+                    <connections>
+                        <outlet property="playPauseButton" destination="7t2-Bg-X5Y" id="B3R-fD-Bc0"/>
+                        <outlet property="progressView" destination="M5c-CL-nmY" id="zU9-xG-GBc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gEc-35-Yl8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-946.39999999999998" y="886.50674662668678"/>
         </scene>
     </scenes>
 </document>

@@ -102,6 +102,7 @@ class SpotifyTrackInfoListPage: BaseManager, SpotifyTrackList {
                 track.albumName = item.album.name
                 track.artistName = item.artistsNameString
                 track.service = MusicServiceEnum.spotify
+                
             }
         }) {[weak self] in
             guard let sself = self else {return}

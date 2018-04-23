@@ -15,7 +15,7 @@ class PlaylistVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var findButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
 
-    var playlistURL: URL!
+    var partialPlaylist: SPTPartialPlaylist!
     
     private var playlist: SpotifyPlaylist!
     private var trackList = [CDTrack]()
@@ -40,7 +40,7 @@ class PlaylistVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     private func setupData() {
-        SpotifyManager.share.getPlaylistSnapshot(playlistURL: playlistURL) {[weak self] (error, snapshot) in
+        SpotifyManager.share.getPlaylistSnapshot(playlist: partialPlaylist) {[weak self] (error, snapshot) in
             guard let sself = self, let snapshot = snapshot else {
                 self?.navigationController?.popViewController(animated: true)
                 return
@@ -60,7 +60,7 @@ class PlaylistVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     @objc func refreshList(_ sender: UIRefreshControl?) {
-        SpotifyManager.share.getPlaylistSnapshot(playlistURL: playlistURL) {[weak self] (error, snapshot) in
+        SpotifyManager.share.getPlaylistSnapshot(playlist: partialPlaylist) {[weak self] (error, snapshot) in
             guard let sself = self, let snapshot = snapshot else {return}
             sself.playlist = snapshot
             sself.getNextPage(completion: {
@@ -104,7 +104,8 @@ class PlaylistVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let vc = VCEnum.player as! PlayerVC
+        show(vc, sender: self)
     }
     
     //MARK: - Helper methods

@@ -16,7 +16,7 @@ typealias PlaylistSnapshotResponse = ((_ error: Error?, _ snapshot: SpotifyPlayl
 
 class SpotifyManager {
     
-    static let share = SpotifyManager(clientID: "f2b685ef7a1f419bb0ac6b4f1cbc45f5", redirectURL: URL(string: "spotify-ios-demo-login://")!, sessionUserDefaultsKey: "current session", requestedScopes: [SPTAuthStreamingScope])
+    static let share = SpotifyManager(clientID: "a550e3e46ce84b0c85ca2003affebf82", redirectURL: URL(string: "spotify-ios-demo-login://")!, sessionUserDefaultsKey: "current session", requestedScopes: [SPTAuthStreamingScope])
     
     init(clientID: String, redirectURL: URL, sessionUserDefaultsKey: String, requestedScopes: [Any]) {
         auth = SPTAuth.defaultInstance()
@@ -27,7 +27,6 @@ class SpotifyManager {
         auth.requestedScopes =  requestedScopes
         player.diskCache = SPTDiskCache(capacity: 1024 * 1024 * 64)
     }
-    
     
     var auth: SPTAuth!
     var player: SPTAudioStreamingController!
@@ -41,15 +40,21 @@ class SpotifyManager {
         return SPTAuth.defaultInstance().session?.accessToken
     }
     
+    //MARK: - PLayer
+    
+    func playTrack() {
+        
+    }
+    
     //MARK: - Track list
     
-    func getPlaylistSnapshot(playlistURL: URL, completion: @escaping PlaylistSnapshotResponse) {
+    func getPlaylistSnapshot(playlist: SPTPartialPlaylist, completion: @escaping PlaylistSnapshotResponse) {
         guard let accessToken = accessToken else {return}
         var block: ((Bool)->Void)!
         
         block = { (retryOnError: Bool) in
             
-            SPTPlaylistSnapshot.playlist(withURI: playlistURL, accessToken: accessToken, callback: {(error, data) in
+            SPTPlaylistSnapshot.playlist(withURI: playlist.uri, accessToken: accessToken, callback: {(error, data) in
                 SpotifyManager.errorHandler(error, retryOnError: retryOnError, data: data as? SPTPlaylistSnapshot, operation: block, completion: { (error, data) in
                     guard let snapshot = data else {
                         if error != nil {
@@ -58,7 +63,7 @@ class SpotifyManager {
                         completion(error, nil)
                         return
                     }
-                    let spSnapshot = SpotifyPlaylistSnapshot(snapshot: snapshot)
+                    let spSnapshot = SpotifyPlaylistSnapshot(snapshot: snapshot, partialPlaylist: playlist)
                     completion(nil, spSnapshot)
                 })
             })

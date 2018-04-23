@@ -81,9 +81,8 @@ class PlayListListTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let playlist = playlistListObj!.itemList[indexPath.row]
         
-        guard let playlistURL = playlist.uri else {return}
         let vc = VCEnum.tracklist.vc as! PlaylistVC
-        vc.playlistURL = playlistURL
+        vc.partialPlaylist = playlist
         show(vc, sender: self)
     }
 
