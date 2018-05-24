@@ -10,6 +10,7 @@ import Foundation
 
 struct InternalPlaylist: Codable {
     let id: String
+    let images: [URL]
     let title: String
     let tracks: [InternalTrack]
 }
